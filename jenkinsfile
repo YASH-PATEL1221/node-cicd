@@ -1,0 +1,19 @@
+pipeline{
+    agent any
+
+    tools{
+        nodejs "nodejs"
+    }
+
+    stages{
+        stage('git checkout') {
+            git credentialsId: 'github-ssh', url: 'git@github.com:YASH-PATEL1221/node-cicd.git'
+        }
+
+        stage('install dependency'){
+            steps{
+                sh 'npm install'
+            }
+        }
+    }
+}
