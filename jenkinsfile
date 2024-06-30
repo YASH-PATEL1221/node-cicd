@@ -18,18 +18,16 @@ pipeline{
             }
         }
 
-        stage('OWASP dependency check'){
-            steps{        
-               dependencyCheck additionalArguments: ''' 
-                    -o './'
-                    -s './'
-                    -f 'ALL' 
-                    --prettyPrint''', odcInstallation: 'DP-check'
-        
-                dependencyCheckPublisher pattern: 'dependency-check-report.xml'
+        stage('docker build'){
+            steps{
+                    script{
+                        withDockerRegistry(credentialsId: 'docker-login', toolName: 'docker') {
+                            sh "docker build -t temp-node ."
+                            sh "docker tag temp-node yashpatel274/temp-node:1"
+                            sh "docker push yashpatel274/temp-node:1"
+                        }
+                    }
             }
         }
     }
 }
-
-//
