@@ -20,8 +20,16 @@ pipeline{
 
         stage('OWASP dependency check'){
             steps{        
-                dependencyCheck additionalArgunments: '--format HTML', ocdInstallation: 'DP-check'
+               dependencyCheck additionalArguments: ''' 
+                    -o './'
+                    -s './'
+                    -f 'ALL' 
+                    --prettyPrint''', odcInstallation: 'DP-check'
+        
+                dependencyCheckPublisher pattern: 'dependency-check-report.xml'
             }
         }
     }
 }
+
+//
