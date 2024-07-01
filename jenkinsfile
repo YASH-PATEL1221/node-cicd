@@ -32,8 +32,7 @@ pipeline{
                     -Dsonar.organization=yash-patel1221 \
                     -Dsonar.projectKey=yash-patel1221_nodejs-code-check \
                     -Dsonar.sources=. \
-                    -Dsonar.host.url=https://sonarcloud.io
-                    '
+                    -Dsonar.host.url=https://sonarcloud.io'
                 }
             }
         }
