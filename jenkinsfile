@@ -19,12 +19,6 @@ pipeline{
             }
         }
 
-        stage('install dependency'){
-            steps{
-                sh 'npm install'
-            }
-        }
-
         stage('sonar scanner'){
             steps{
                 withSonarQubeEnv(installationName: 'sonarqube') {
@@ -34,6 +28,12 @@ pipeline{
                     -Dsonar.sources=. \
                     -Dsonar.host.url=https://sonarcloud.io'
                 }
+            }
+        }
+
+        stage('install dependency'){
+            steps{
+                sh 'npm install'
             }
         }
 
