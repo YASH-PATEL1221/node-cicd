@@ -40,9 +40,16 @@ pipeline{
 
                     println trivyOutput
 
-                    if (trivyOutput.contains("Total: 2")) {
-                        echo "2 vulnerabilities found in the Docker image."
-                    } else {
+                    if (trivyOutput.contains("Total: 0")) {
+                        echo "No vulnerabilities found in the Docker image."
+                    }
+                    else if(trivyOutput.contains("Total: 1")){
+                        unstable('1 vulnerabilities found in the Docker image.');
+                    }
+                    else if(trivyOutput.contains("Total: 2")){
+                        unstable('2 vulnerabilities found in the Docker image.');
+                    }
+                    else {
                         error "Vulnerabilities found in the Docker image."
                         return;
                     }
