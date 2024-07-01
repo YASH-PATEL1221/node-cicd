@@ -7,7 +7,6 @@ pipeline{
 
     environment{
         APP_NAME="yashpatel274/temp-node"
-        BUILD_NUMBER=currentBuild.number
     }
 
     stages{
