@@ -40,7 +40,14 @@ pipeline{
         stage('docker build'){
             steps{
                     script{
-                        sh "docker rmi $APP_NAME:${env.BUILD_NUMBER -1} ."
+                        def previousImageId = sh(script: "docker images --format '{{.ID}}' | tail -n +2 | head -n 1", returnStdout: true).trim()
+                        if (previousImageId) {
+                        // Remove the previous image
+                            sh "docker rmi ${previousImageId}"
+                            echo "Removed previous Docker image with ID: ${previousImageId}"
+                        } else {
+                            echo "No previous Docker image found."
+                        }
                         sh "docker build -t $APP_NAME:${env.BUILD_NUMBER} ."
                     }
             }
