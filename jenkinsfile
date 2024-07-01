@@ -20,7 +20,7 @@ pipeline{
         }
 
         // stage('sonar scanner'){
-        //     steps{
+        //     steps{ 
         //         withSonarQubeEnv(installationName: 'sonarqube') {
         //             sh '/root/sonar/sonar/bin/sonar-scanner \
         //             -Dsonar.organization=yash-patel1221 \ 
