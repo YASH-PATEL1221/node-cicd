@@ -42,7 +42,7 @@ pipeline{
                     if (trivyOutput.contains("Total: 0")) {
                         echo "No vulnerabilities found in the Docker image."
                     } else {
-                        echo "Vulnerabilities found in the Docker image."
+                        error "Vulnerabilities found in the Docker image."
                         return;
                     }
                 }
