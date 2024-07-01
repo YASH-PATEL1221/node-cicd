@@ -5,6 +5,10 @@ pipeline{
         nodejs "nodejs"
     }
 
+    environment{
+        APP_NAME="yashpatel274/temp-node"
+    }
+
     stages{
         stage('git checkout') {
             steps{
@@ -22,12 +26,29 @@ pipeline{
             steps{
                     script{
                         withDockerRegistry(credentialsId: 'docker-login', toolName: 'docker') {
-                            sh "docker build -t temp-node ."
-                            sh "docker tag temp-node yashpatel274/temp-node:1"
-                            sh "docker push yashpatel274/temp-node:1"
+                            sh "docker build -t $APP_NAME ."
+                            // sh "docker tag temp-node yashpatel274/temp-node:1"
+                            // sh "docker push yashpatel274/temp-node:1"
                         }
                     }
             }
         }
+    
+        stage('Scan Docker Image'){
+            steps{
+                script{
+                    def trivyOutput = sh(script: "trivy image $APP_NAME:latest", returnStdout: true).trim()
+
+                    println trivyOutput
+
+                    if (trivyOutput.contains("Total: 2")) {
+                        echo "No vulnerabilities found in the Docker image."
+                    } else {
+                        echo "Vulnerabilities found in the Docker image."
+                    }
+                }
+            }
+        }
+
     }
 }
