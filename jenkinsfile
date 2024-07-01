@@ -21,17 +21,14 @@ pipeline{
 
         stage('sonar scanner'){
             steps{
-                script{
-                    def scannerHome = tool 'sonarqube';
-                    withSonarQubeEnv(installationName: 'sonarqube') {
-                    sh '${tool('sonarqube')}/bin/sonar-scanner \
+                withSonarQubeEnv(installationName: 'sonarqube') {
+                    sh '/root/sonar/sonar/bin/sonar-scanner \
                     -Dsonar.organization=yash-patel1221 \
                     -Dsonar.projectKey=yash-patel1221_nodejs-code-check \
                     -Dsonar.sources=. \
                     -Dsonar.host.url=https://sonarcloud.io'
                 }
-              }     
-           }
+            }
         }
 
         stage('install dependency'){
