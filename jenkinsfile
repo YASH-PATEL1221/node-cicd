@@ -28,9 +28,7 @@ pipeline{
         stage('docker build'){
             steps{
                     script{
-                        withDockerRegistry(credentialsId: 'docker-login', toolName: 'docker') {
-                            sh "docker build -t $APP_NAME:${env.BUILD_NUMBER} ."
-                        }
+                        sh "docker build -t $APP_NAME:${env.BUILD_NUMBER} ."
                     }
             }
         }
@@ -55,7 +53,9 @@ pipeline{
         stage("Push to docker hub"){
             steps{
                 script{
-                    sh "docker push yashpatel274/temp-node:${env.BUILD_NUMBER}"
+                    withDockerRegistry(credentialsId: 'docker-login', toolName: 'docker') {
+                        sh "docker push yashpatel274/temp-node:${env.BUILD_NUMBER}"
+                    }
                 }
             }
         }
