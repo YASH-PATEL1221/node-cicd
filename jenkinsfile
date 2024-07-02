@@ -19,18 +19,6 @@ pipeline{
             }
         }
 
-        // stage('sonar scanner'){
-        //     steps{ 
-        //         withSonarQubeEnv(installationName: 'sonarqube') {
-        //             sh '/root/sonar/sonar/bin/sonar-scanner \
-        //             -Dsonar.organization=yash-patel1221 \ 
-        //             -Dsonar.projectKey=yash-patel1221_nodejs-code-check \
-        //             -Dsonar.sources=. \
-        //             -Dsonar.host.url=https://sonarcloud.io'
-        //         }
-        //     }
-        // }
-
         stage('install dependency'){
             steps{
                 sh 'npm install'
@@ -42,7 +30,6 @@ pipeline{
                     script{
                         def previousImageId = sh(script: "docker images --format '{{.ID}}' | tail -n +2 | head -n 1", returnStdout: true).trim()
                         if (previousImageId) {
-                        // Remove the previous image
                             sh "docker rmi ${previousImageId}"
                             echo "Removed previous Docker image with ID: ${previousImageId}"
                         } else {
@@ -82,6 +69,15 @@ pipeline{
                 script{
                     withDockerRegistry(credentialsId: 'docker-login', toolName: 'docker') {
                         sh "docker push $APP_NAME:${env.BUILD_NUMBER}"
+                    }
+                }
+            }
+        }
+        stage("Deploy using helm"){
+            steps{
+                script{
+                    withDockerRegistry(credentialsId: 'docker-login', toolName: 'docker') {
+                        sh "helm install node-service ./node-chart "
                     }
                 }
             }
